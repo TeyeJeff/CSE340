@@ -18,7 +18,6 @@ const app = express();
  */
 
 // 4. Serve static files from the public directory
-// This must come AFTER 'app' is defined but BEFORE your routes
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set EJS as the templating engine
@@ -45,6 +44,11 @@ app.get('/organizations', async (req, res) => {
 app.get('/projects', async (req, res) => {
     const title = 'Service Projects';
     res.render('projects', { title });
+});
+
+app.get('/categories', async (req, res) => {
+    const title = 'Categories';
+    res.render('categories', { title });
 });
 
 // 6. Start the server
