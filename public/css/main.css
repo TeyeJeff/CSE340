@@ -110,6 +110,56 @@ footer {
     border-radius: 8px; /* Optional: gives it a professional rounded look */
 }
 
+/* Container for the list */
+.projects-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+/* Individual project item card */
+.project-item {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    border-left: 4px solid #0284c7; /* A clean blue accent bar */
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* The main line: Date, Title, Organization */
+.project-header {
+    font-size: 1.15rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.sponsor-tag {
+    color: #64748b;
+    font-size: 0.95rem;
+    font-style: italic;
+    margin-left: 0.25rem;
+}
+
+/* Sub-container for location and description */
+.project-details {
+    padding-left: 1.25rem; /* Indents the details neatly under the title */
+    border-left: 1px dashed #e2e8f0; /* Soft vertical alignment line */
+}
+
+.project-location {
+    font-size: 0.95rem;
+    color: #0f172a;
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+.project-description {
+    font-size: 1rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0;
+}
+
 /* 5. Responsive Media Query (Desktop) */
 @media (min-width: 600px) {
     nav ul {
