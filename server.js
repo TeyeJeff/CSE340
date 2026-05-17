@@ -60,14 +60,12 @@ app.get('/categories', async (req, res) => {
     res.render('categories', { title });
 });
 
-// 6. Start the server
-app.listen(PORT, async () => {
-  try {
-    await testConnection();
-    console.log(`Server is running at http://127.0.0.1:${PORT}`);
-    console.log(`Environment: ${NODE_ENV}`);
-  } catch (error) {
-    console.error('Error connecting to the database:', error);
-  }
+// 6. Start the server and lock it open permanently
+app.listen(PORT, () => {
+    console.log(`🚀 Server is actively listening at http://127.0.0.1:${PORT}`);
+    console.log(`💻 Environment: ${NODE_ENV}`);
+    
+    // Test connection in the background so it never interferes with thread survival
+    testConnection().catch(err => console.error("Database connection check failed:", err.message));
 });
 

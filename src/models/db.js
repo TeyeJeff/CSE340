@@ -1,19 +1,17 @@
 import { Pool } from 'pg';
 
-// FIX: Make SSL configuration flexible for local machines connecting to Render
 const pool = new Pool({
     connectionString: process.env.DB_URL,
     ssl: {
-        rejectUnauthorized: false // Prevents local OS handshake rejections
+        rejectUnauthorized: false
     }
 });
 
 let db = null;
 
-// Modified to ensure your queries log errors cleanly during local development tasks
 if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING === 'true') {
     db = {
-        async query(text, params) {
+        query: async (text, params) => {
             try {
                 const start = Date.now();
                 const res = await pool.query(text, params);
@@ -29,14 +27,13 @@ if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING ===
                 throw error;
             }
         },
-        async close() {
+        close: async () => {
             await pool.end();
         }
     };
 } else {
-    // FALLBACK SAFETY: Add an explicit catch wrapper even if logging is turned off
     db = {
-        async query(text, params) {
+        query: async (text, params) => {
             try {
                 return await pool.query(text, params);
             } catch (error) {
@@ -44,20 +41,20 @@ if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING ===
                 throw error;
             }
         },
-        async close() {
+        close: async () => {
             await pool.end();
         }
     };
 }
 
-const testConnection = async() => {
+const testConnection = async () => {
     try {
         const result = await db.query('SELECT NOW() as current_time');
         console.log('Database connection successful:', result.rows[0].current_time);
         return true;
     } catch (error) {
         console.error('❌ CRITICAL: Database connection failed during startup:', error.message);
-        return false; // Changed throw to false so your local server doesn't brick entirely
+        return false;
     }
 };
 
