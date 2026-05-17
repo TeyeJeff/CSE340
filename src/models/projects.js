@@ -2,7 +2,6 @@ import db from "./db.js";
 
 // FIX: Fixed the spelling of "getAllServiceProjects"
 const getAllServiceProjects = async () => {
-    try {
         const query = `
             SELECT
                 p.project_id,
@@ -18,12 +17,6 @@ const getAllServiceProjects = async () => {
 
         const result = await db.query(query);
         return result.rows;
-    } catch (error) {
-        // Adding a try/catch block ensures that if your SQL query has a typo, 
-        // it logs the error clearly in your terminal instead of crashing your server.
-        console.error("Error executing getAllServiceProjects:", error.message);
-        throw error;
-    }
 }
 
 export { getAllServiceProjects };
