@@ -1,11 +1,14 @@
-    <%- include('partials/header') %>
-    <main>
-        <h1><%= title %></h1>
-        <ul>
-            <li>Environmental</li>
-            <li>Educational</li>
-            <li>Community Service</li>
-            <li>Health and Wellness</li>
-        </ul>
-    </main>
-    <%- include('partials/footer') %>
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <p>Browse our service projects by sector:</p>
+    
+    <ul class="categories-list">
+        <% categories.forEach(category => { %>
+            <li class="category-item">
+                📁 <strong><%= category.name %></strong> 
+            </li>
+        <% }); %>
+    </ul>
+</main>
+<%- include('partials/footer') %>

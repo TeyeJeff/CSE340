@@ -61,3 +61,60 @@ VALUES
 (3, 'Senior Facility Painting', 'Give the interior community dining hall a fresh, bright coat of paint to liven up the living space.', 'Autumn Leaf Retirement Home', '2026-09-05');
 
 SELECT * FROM service_project;
+
+
+-- 1. Creating the lookup table for categories
+CREATE TABLE IF NOT EXISTS project_category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 2. Creating the junction table to establish a Many-to-Many relationship
+CREATE TABLE IF NOT EXISTS project_category_mapping (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project FOREIGN KEY (project_id) 
+        REFERENCES service_project(project_id) ON DELETE CASCADE,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) 
+        REFERENCES project_category(category_id) ON DELETE CASCADE
+);
+
+-- 3. Populating at least 3 relevant service project categories
+INSERT INTO project_category (name) 
+VALUES
+('Community Clean-up & Environment'),
+('Education & Tutoring'),
+('Food Security & Healthcare')
+ON CONFLICT (name) DO NOTHING;
+
+-- 4. Associating every project with at least one category
+-- (Assuming all 15 projects have project_id values from 1 to 15)
+INSERT INTO project_category_mapping (project_id, category_id) VALUES
+(1, 1), -- Project 1 linked to Community Clean-up
+(2, 1),
+(3, 2), -- Project 3 linked to Education
+(4, 2),
+(5, 3), -- Project 5 linked to Food Security
+(6, 3),
+(7, 1),
+(8, 2),
+(9, 3),
+(10, 1),
+(11, 2),
+(12, 3),
+(13, 1),
+(14, 2),
+(15, 3)
+ON CONFLICT DO NOTHING;
+
+-- Bonus: Let's associate a few projects with a second category to demonstrate the many-to-many functionality
+INSERT INTO project_category_mapping (project_id, category_id) 
+VALUES
+(1, 2), -- Project 1 is now BOTH Community Clean-up AND Education
+(7, 3)  -- Project 7 is now BOTH Community Clean-up AND Food Security
+ON CONFLICT DO NOTHING;
+
+SELECT * FROM project_category;
+
+SELECT * FROM project_category_mapping;
