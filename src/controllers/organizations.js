@@ -1,4 +1,5 @@
-import { getAllOrganizations } from "../models/organizations.js";
+import { getAllOrganizations, getOrganizationDetails } from '../models/organizations.js';
+import { getProjectsByOrganizationId } from '../models/projects.js';
 
 // Defining organization controller fuction
 
@@ -10,5 +11,16 @@ const showOrganizationsPage = async (req, res) => {
     res.render('organizations', { title, organizations });
 };
 
+
+
+const showOrganizationDetailsPage = async (req, res) => {
+    const organizationId = req.params.id;
+    const organizationDetails = await getOrganizationDetails(organizationId);
+    const projects = await getProjectsByOrganizationId(organizationId);
+    const title = 'Organization Details';
+
+    res.render('organization', {title, organizationDetails, projects});
+};
+
 // Exporting organization controller function to be used in routes.ejs
-export { showOrganizationsPage };
+export { showOrganizationsPage, showOrganizationDetailsPage };
