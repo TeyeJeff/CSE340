@@ -41,8 +41,6 @@ const getProjectsByOrganizationId = async (organizationId) => {
 
 /**
  * Retrieves a limited number of upcoming service projects
- * @param {number} number_of_projects - The maximum number of projects to return
- * @returns {Promise<Array>} An array of service project objects with organization names
  */
 const getUpcomingProjects = async (number_of_projects) => {
     const query = `
@@ -68,10 +66,7 @@ const getUpcomingProjects = async (number_of_projects) => {
 };
 
 /**
- * Retrieves a single service project by its ID
- * @param {number|string} id - The unique ID of the service project
- * @returns {Promise<Object|null>} The service project object, or null if not found
- */
+ * Retrieves a single service project by its ID 8 **/
 const getProjectDetails = async (id) => {
     const query = `
         SELECT 
@@ -94,5 +89,20 @@ const getProjectDetails = async (id) => {
     return result.rows.length > 0 ? result.rows[0] : null;
 };
 
+/**
+ * Retrieves all service projects belonging to a given category
+*/
+const getProjectsByCategoryId = async (categoryId) => {
+    const query = `
+        SELECT p.project_id, p.title, p.description, p.date, p.location
+        FROM public.service_project p
+        JOIN public.project_category_mapping b ON p.project_id = b.project_id
+        WHERE b.category_id = $1
+        ORDER BY p.date ASC;
+    `;
+    const result = await db.query(query, [categoryId]);
+    return result.rows;
+};
+
 // Export the model functions
-export { getAllServiceProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails  };
+export { getAllServiceProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails, getProjectsByCategoryId  };

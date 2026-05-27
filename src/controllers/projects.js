@@ -1,6 +1,7 @@
 import { getAllServiceProjects } from "../models/projects.js";
 import { getProjectDetails } from "../models/projects.js";
 import { getUpcomingProjects } from "../models/projects.js";
+import { getCategoriesByProjectId } from "../models/categories.js";
 
 // Global configuration for the maximum number of upcoming projects to display
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
@@ -27,31 +28,29 @@ const showProjectsPage = async (req, res, next) => {
  */
 const showProjectDetailsPage = async (req, res, next) => {
     try {
-        // Extract the unique project id from the URL parameters (e.g., /projects/:id)
         const projectId = req.params.id;
         
-        // Fetch the corresponding detailed record from the database model
+        // Run both queries safely
         const project = await getProjectDetails(projectId);
         
-        // If the project doesn't exist in the database, trigger a 404 Page Not Found error
         if (!project) {
             const err = new Error('Project Not Found');
             err.status = 404;
             return next(err);
         }
 
-        console.log(project);
+        // Fetch the categories associated with this specific project
+        const categories = await getCategoriesByProjectId(projectId);
         
-        // Render the detailed project template view and pass the data object packet
         res.render("project", { 
             title: project.title, 
-            project 
+            project,
+            categories // Passed into the view as an array
         });
     } catch (error) {
         next(error);
     }
 };
-
 // Exporting projects controller functions to be used in routes.js
 export { 
     showProjectsPage, 
