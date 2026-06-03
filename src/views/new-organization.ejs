@@ -1,41 +1,57 @@
 <%- include('partials/header') %>
-<main>
+
+<main class="form-container">
     <h1><%= title %></h1>
 
- <form action="/new-organization" method="POST">
-    <div class="form-group">
-      <label for="name">Organization Name</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        required
-        max-length="150"
-      />
-    </div>
+    <% if (locals.errors) { %>
+        <ul class="validation-errors">
+            <% errors.forEach(error => { %>
+                <li>❌ <%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
 
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea
-        id="description"
-        name="description"
-        required
-        maxlength="500"
-      ></textarea>
-    </div>
+    <form action="/new-organization" method="POST" class="crud-form">
+        <div class="form-group">
+            <label for="name">Organization Name:</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                maxlength="150"
+                placeholder="e.g., Red Cross"
+            />
+        </div>
 
-    <div class="form-group">
-      <label for="contactEmail">Contact Email</label>
-      <input
-        type="email"
-        id="contactEmail"
-        name="contactEmail"
-        required
-      />
-    </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea
+                id="description"
+                name="description"
+                required
+                maxlength="500"
+                rows="5"
+                placeholder="Provide a brief summary of the organization's mission..."
+            ></textarea>
+        </div>
 
-    <button type="submit">Create Organization</button>
-  </form>
+        <div class="form-group">
+            <label for="contactEmail">Contact Email:</label>
+            <input
+                type="email"
+                id="contactEmail"
+                name="contactEmail"
+                required
+                placeholder="contact@organization.org"
+            />
+        </div>
 
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Create Organization</button>
+            <a href="/organizations" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
 </main>
+
 <%- include('partials/footer') %>

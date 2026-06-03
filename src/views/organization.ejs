@@ -2,17 +2,31 @@
 <main>
     <h1><%= title %></h1>
 
-    <h2><%= organizationDetails.name %></h2>
-    <img src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+    <div class="organization-profile-header">
+        <h2><%= organizationDetails.name %></h2>
+        <img class="organization-logo" src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+        <p class="org-description"><strong>Description:</strong> <%= organizationDetails.description %></p>
+    </div>
 
-    <p>Description: <%= organizationDetails.description %></p>
+    <hr class="section-divider">
 
     <h3>Service Projects</h3>
-    <ul>
-        <% projects.forEach(project => { %>
-            <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
-        <% }) %>
-    </ul>
-    <p><a href="/edit-organization/<%= organizationDetails.organization_id %>">Edit Organization</a></p>
+    <% if (projects && projects.length > 0) { %>
+        <ul class="projects-list">
+            <% projects.forEach(project => { %>
+                <li class="project-item">
+                    <div class="project-header">
+                        <strong><a href="/project/<%= project.project_id %>"><%= project.title %></a></strong>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No projects listed under this partner organization yet.</p>
+    <% } %>
+    
+    <div class="page-actions-footer">
+        <a href="/edit-organization/<%= organizationDetails.organization_id %>" class="btn-edit">Edit Organization Details</a>
+    </div>
 </main>
 <%- include('partials/footer') %>

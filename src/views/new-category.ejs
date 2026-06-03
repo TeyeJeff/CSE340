@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+
+<main class="form-container">
+    <h1><%= title %></h1>
+
+    <% if (locals.errors) { %>
+        <ul class="validation-errors">
+            <% errors.forEach(error => { %>
+                <li>❌ <%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+
+    <form action="/new-category" method="POST" class="crud-form">
+        <div class="form-group">
+            <label for="name">Category Name:</label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                value="<%= categoryName %>" 
+                required 
+                maxlength="100"
+                placeholder="e.g., Environmental"
+            >
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Create Category</button>
+            <a href="/categories" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</main>
+
+<%- include('partials/footer') %>

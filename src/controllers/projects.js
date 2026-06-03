@@ -5,6 +5,7 @@ import { getCategoriesByProjectId } from "../models/categories.js";
 import { createProject } from "../models/projects.js";
 import { getAllOrganizations } from "../models/organizations.js";
 import { body, validationResult } from 'express-validator';
+import { updateProject } from "../models/projects.js";
 
 
 const projectValidation = [
@@ -115,6 +116,84 @@ const processNewProjectForm = async (req, res) => {
     }
 }
 
+// 1. Display the Edit Form
+const showEditProjectForm = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        
+        // Fetch existing project data and the full list of organizations concurrently
+        const project = await getProjectDetails(projectId);
+        const organizations = await getAllOrganizations();
+
+        if (!project) {
+            const err = new Error('Project Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        // Format date string to YYYY-MM-DD for the HTML5 date picker input
+        if (project.date) {
+            project.formattedDate = new Date(project.date).toISOString().split('T')[0];
+        }
+
+        res.render('edit-project', {
+            title: `Edit ${project.title}`,
+            project,
+            organizations
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// 2. Process the Form Submission
+const processEditProjectForm = async (req, res, next) => {
+    // 1. Extract any errors caught by the projectValidation middleware array
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        try {
+            const projectId = req.params.id;
+            // Re-fetch partner organizations array to re-populate the selection drop-menu dropdown
+            const organizations = await getAllOrganizations();
+
+            // Reconstruct a temporary project memory state so the user's typed input isn't lost
+            const temporaryProjectState = {
+                project_id: projectId,
+                title: req.body.title,
+                description: req.body.description,
+                location: req.body.location,
+                organization_id: parseInt(req.body.organizationId),
+                // Re-bind the exact raw input date string back to the calendar date input element
+                formattedDate: req.body.date 
+            };
+
+            // Re-render the correct updated template name, passing the array of error messages
+            return res.render('edit-project', {
+                title: `Edit ${req.body.title || 'Project'}`,
+                project: temporaryProjectState,
+                organizations: organizations,
+                errors: errors.array() // Sends the array directly to the card list container
+            });
+        } catch (err) {
+            return next(err);
+        }
+    }
+
+    try {
+        const projectId = req.params.id;
+        const { title, description, date, location, organizationId } = req.body;
+
+        // If validation errors are completely empty, commit changes securely to the database
+        await updateProject(projectId, title, description, date, location, organizationId);
+
+        if (req.flash) req.flash('success', 'Project updated successfully.');
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 // Exporting projects controller functions to be used in routes.js
 export { 
@@ -122,5 +201,7 @@ export {
     showProjectDetailsPage,
     processNewProjectForm,
     showNewProjectForm,
-    projectValidation
+    projectValidation,
+    showEditProjectForm,
+    processEditProjectForm
 };

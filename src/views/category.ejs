@@ -1,22 +1,26 @@
 <%- include('partials/header') %>
 
-<main class="category-detail-container">
+<main>
     <h1>Category: <%= category.name %></h1>
     <% if (category.description) { %>
         <p class="category-desc"><em><%= category.description %></em></p>
     <% } %>
     
-    <hr>
+    <hr class="section-divider">
 
     <h2>Service Projects in this Category</h2>
     <% if (projects && projects.length > 0) { %>
-        <ul class="category-projects-list">
+        <ul class="projects-list">
             <% projects.forEach(project => { %>
-                <li>
-                    <a href="/project/<%= project.project_id %>">
-                        <%= project.title %>
-                    </a>
-                    <span class="project-date">- <%= new Date(project.date).toLocaleDateString() %></span>
+                <li class="project-item">
+                    <div class="project-header">
+                        <strong>
+                            <a href="/project/<%= project.project_id %>">
+                                <%= project.title %>
+                            </a>
+                        </strong>
+                        <span class="project-date"> - <%= new Date(project.date).toLocaleDateString() %></span>
+                    </div>
                 </li>
             <% }) %>
         </ul>
@@ -24,9 +28,12 @@
         <p>No service projects are currently assigned to this category.</p>
     <% } %>
 
-    <p class="back-link">
-        <a href="/categories">&larr; Back to All Categories</a>
-    </p>
+    <div class="page-actions-footer">
+        <p class="back-link">
+            <a href="/categories">&larr; Back to All Categories</a>
+        </p>
+        <a href="/edit-category/<%= category.category_id %>" class="btn-edit-link">✏️ Edit Category Name</a>
+    </div>
 </main>
 
 <%- include('partials/footer') %>
