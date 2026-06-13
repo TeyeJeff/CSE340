@@ -32,7 +32,9 @@
         <p class="back-link">
             <a href="/categories">&larr; Back to All Categories</a>
         </p>
+        <% if (user && user.role_name === "admin") {%>
         <a href="/edit-category/<%= category.category_id %>" class="btn-edit-link">✏️ Edit Category Name</a>
+        <% } %>
     </div>
 </main>
 

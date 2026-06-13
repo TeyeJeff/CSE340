@@ -37,8 +37,10 @@
             <a href="/projects">&larr; Back to Upcoming Projects</a>
         </p>
         <div class="admin-actions">
+            <% if (user && user.role_name === 'admin') { %>
             <a href="/assign-categories/<%= project.project_id %>" class="btn-edit-link">🏷️ Edit Categories</a>
             <a href="/edit-project/<%= project.project_id %>" class="btn-edit">✏️ Edit Project Details</a>
+            <% } %>
         </div>
     </div>
 </main>

@@ -17,6 +17,7 @@ import { processNewProjectForm, showNewProjectForm, projectValidation } from './
 import { showAssignCategoriesForm, processAssignCategoriesForm } from './controllers/categories.js';
 import { showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { showCreateCategoryForm, processCreateCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidationRules } from './controllers/categories.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, showDashboard, requireLogin, requireRole } from './controllers/users.js';
 
 const router = express.Router();
 
@@ -69,6 +70,38 @@ router.post('/new-category', categoryValidationRules, processCreateCategoryForm)
 // Edit Category Routes
 router.get('/edit-category/:id', showEditCategoryForm);
 router.post('/edit-category/:id', categoryValidationRules, processEditCategoryForm);
+
+// User registration routes
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+
+// User login routes
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
+
+// Protected Dashboard Route
+router.get('/dashboard', requireLogin, showDashboard);
+
+// --- ORGANIZATION ADMIN ROUTES ---
+router.get('/new-organization', requireRole('admin'), showNewOrganizationForm);
+router.post('/new-organization', requireRole('admin'), organizationValidation, processNewOrganizationForm);
+router.get('/edit-organization/:id', requireRole('admin'), showEditOrganizationForm);
+router.post('/edit-organization/:id', requireRole('admin'), organizationValidation, processEditOrganizationForm);
+
+// --- PROJECT ADMIN ROUTES ---
+router.get('/new-project', requireRole('admin'), showNewProjectForm);
+router.post('/new-project', requireRole('admin'), projectValidation, processNewProjectForm);
+router.get('/edit-project/:id', requireRole('admin'), showEditProjectForm);
+router.post('/edit-project/:id', requireRole('admin'), projectValidation, processEditProjectForm);
+
+// --- CATEGORY ADMIN ROUTES ---
+router.get('/new-category', requireRole('admin'), showCreateCategoryForm);
+router.post('/new-category', requireRole('admin'), categoryValidationRules, processCreateCategoryForm);
+router.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);
+router.post('/edit-category/:id', requireRole('admin'), categoryValidationRules, processEditCategoryForm);
+router.get('/assign-categories/:projectId', requireRole('admin'), showAssignCategoriesForm);
+router.post('/assign-categories/:projectId', requireRole('admin'), processAssignCategoriesForm);
 
 // Error-handling test route
 router.get('/test-error', testErrorPage);

@@ -55,8 +55,16 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Middleware to make NODE_ENV available to all templates
+// Middleware to make NODE_ENV available when logged in 
 app.use((req, res, next) => {
+    res.locals.isLoggedIn = false;
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+    }
+
+    // Safely inject the user data payload or null into local views
+    res.locals.user = req.session ? req.session.user : null;
+
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });

@@ -26,7 +26,9 @@
     <% } %>
     
     <div class="page-actions-footer">
-        <a href="/edit-organization/<%= organizationDetails.organization_id %>" class="btn-edit">Edit Organization Details</a>
+        <% if (user && user.role_name === "admin") { %> 
+        <a href="/edit-organization/<%= organizationDetails.organization_id %>" class="btn-edit">Edit Organization Details</a> 
+        <% } %>
     </div>
 </main>
 <%- include('partials/footer') %>
