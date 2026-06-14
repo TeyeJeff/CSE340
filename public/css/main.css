@@ -486,6 +486,133 @@ footer {
 }
 
 /* ==========================================================================
+   10. Admin Dashboard & User Roster Directory Layout System
+   ========================================================================== */
+
+/* Administrative Panel Container on Dashboard */
+.admin-controls-panel {
+    background-color: var(--white);
+    padding: 1.75rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--secondary-color); /* Dark slate accent block contrast */
+    margin-top: 2rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.admin-controls-panel h3 {
+    margin-top: 0;
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-controls-panel p {
+    color: #475569;
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Administrative Action Buttons Override */
+.btn-admin {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: var(--white) !important;
+    padding: 0.65rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none !important;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-admin:hover {
+    background-color: #0f172a;
+    text-decoration: none !important;
+}
+
+/* Responsive Table Wrapper Shell */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Forces horizontal scrollbars only on small screens if card overflows */
+    margin: 1.5rem 0;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+/* User Data Roster Table Styling */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.user-table th {
+    background-color: #f8fafc;
+    color: var(--secondary-color);
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.user-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--text-color);
+    vertical-align: middle;
+}
+
+.user-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Alternating Row Highlight */
+.user-table tr:nth-child(even) {
+    background-color: #fdfdfd;
+}
+
+/* Hover effect over table rows */
+.user-table tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* Status Role Badges Architecture */
+.role-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+/* Green badge theme for normal users */
+.role-badge.user {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+/* Purple badge theme for admin users */
+.role-badge.admin {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+    border: 1px solid #e9d5ff;
+}
+
+/* Simple fade animation utility */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
    9. Media Query Responsive View Adjustments
    ========================================================================== */
 @media (min-width: 600px) {

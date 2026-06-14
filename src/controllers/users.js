@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { createUser } from '../models/users.js';
-import { authenticateUser } from '../models/users.js';
+import { authenticateUser, getAllUsersWithRoles } from '../models/users.js';
 
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
@@ -104,5 +104,20 @@ const requireRole = (role) => {
     };
 };
 
+// Controller function to display the admin users page
+const showAllUsers = async (req, res) => {
+    try {
+        const userList = await getAllUsersWithRoles();
+        res.render('users-list', { 
+            title: 'Manage Users', 
+            users: userList 
+        });
+    } catch (error) {
+        console.error('Error fetching users roster:', error);
+        req.flash('error', 'Unable to load the user directory at this time.');
+        res.redirect('/dashboard');
+    }
+};
 
-export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole };
+
+export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showAllUsers };

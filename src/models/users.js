@@ -25,7 +25,7 @@ const createUser = async (name, email, passwordHash) => {
 
 const findUserByEmail = async (email) => {
     const query = `
-    SELECT u.user_id, u.email, u.password_hash, r.role_name 
+    SELECT u.user_id, u.name, u.email, u.password_hash, r.role_name 
     FROM users u
     JOIN roles r ON u.role_id = r.role_id
     WHERE u.email = $1
@@ -65,6 +65,18 @@ const authenticateUser = async (email, password) => {
     }
 
     return null;
+}
+
+export async function getAllUsersWithRoles() {
+    // Using a pool connection instance (adjust name 'pool' or 'db' to match your project)
+    const query = `
+        SELECT u.user_id, u.name, u.email, r.role_name 
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        ORDER BY u.name ASC;
+    `;
+    const result = await db.query(query);
+    return result.rows;
 }
 
 export { createUser, authenticateUser };

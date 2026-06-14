@@ -7,6 +7,16 @@
     <p>Name: <%= name %></p>
     <p>Username: <%= email %></p>
 
+
+    <h2>Welcome back, <%= name %>!</h2> <% if (user && user.role_name === 'admin') { %>
+    <div class="admin-controls-panel">
+        <h3>Administrative Tools</h3>
+        <p>As an administrator, you have access to core directory structures:</p>
+        <a href="/users" class="btn btn-admin">Manage System Users</a>
+    </div>
+    <% } %>
+
+
 </main>
 
 <%- include('partials/footer') %>

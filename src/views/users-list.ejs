@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+
+<main class="container">
+    <h1>Registered Users Directory</h1>
+    
+    <div class="table-responsive">
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email / Username</th>
+                    <th>System Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(registeredUser => { %>
+                    <tr>
+                        <td><%= registeredUser.name %></td>
+                        <td><%= registeredUser.email %></td>
+                        <td>
+                            <span class="role-badge <%= registeredUser.role_name %>">
+                                <%= registeredUser.role_name.toUpperCase() %>
+                            </span>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

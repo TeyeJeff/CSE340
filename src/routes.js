@@ -17,7 +17,7 @@ import { processNewProjectForm, showNewProjectForm, projectValidation } from './
 import { showAssignCategoriesForm, processAssignCategoriesForm } from './controllers/categories.js';
 import { showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { showCreateCategoryForm, processCreateCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidationRules } from './controllers/categories.js';
-import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, showDashboard, requireLogin, requireRole } from './controllers/users.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, showDashboard, requireLogin, requireRole, showAllUsers } from './controllers/users.js';
 
 const router = express.Router();
 
@@ -102,6 +102,9 @@ router.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);
 router.post('/edit-category/:id', requireRole('admin'), categoryValidationRules, processEditCategoryForm);
 router.get('/assign-categories/:projectId', requireRole('admin'), showAssignCategoriesForm);
 router.post('/assign-categories/:projectId', requireRole('admin'), processAssignCategoriesForm);
+
+// Admin-only User Directory Route
+router.get('/users', requireLogin, requireRole('admin'), showAllUsers);
 
 // Error-handling test route
 router.get('/test-error', testErrorPage);
