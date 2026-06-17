@@ -6,6 +6,7 @@ import { createProject } from "../models/projects.js";
 import { getAllOrganizations } from "../models/organizations.js";
 import { body, validationResult } from 'express-validator';
 import { updateProject } from "../models/projects.js";
+import { isUserVolunteering } from "../models/volunteers.js";
 
 
 const projectValidation = [
@@ -69,10 +70,21 @@ const showProjectDetailsPage = async (req, res, next) => {
         // Fetch the categories associated with this specific project
         const categories = await getCategoriesByProjectId(projectId);
         
+        // 1. Default the volunteering status to false (covers guests who aren't logged in)
+        let isVolunteering = false;
+
+        // 2. If a user IS logged in, check if they are currently volunteering for this project
+        if (req.session && req.session.user) {
+            const userId = req.session.user.user_id;
+            isVolunteering = await isUserVolunteering(userId, projectId);
+        }
+        
+        // 3. Pass isVolunteering into your EJS template alongside the other data
         res.render("project", { 
             title: project.title, 
             project,
-            categories // Passed into the view as an array
+            categories, // Passed into the view as an array
+            isVolunteering // Safe boolean flag for conditional UI rendering
         });
     } catch (error) {
         next(error);

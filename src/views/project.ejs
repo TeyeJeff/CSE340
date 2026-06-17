@@ -32,6 +32,28 @@
         <p><%= project.description %></p>
     </section>
 
+    <% if (isLoggedIn) { %>
+    <div class="volunteer-actions-box" style="margin: 2rem 0; padding: 1.5rem; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <% if (isVolunteering) { %>
+            <p style="color: #15803d; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                ✓ You are volunteering for this project!
+            </p>
+            <form action="/projects/<%= project.project_id %>/unvolunteer" method="POST" style="margin-top: 0.5rem;">
+                <button type="submit" class="btn-cancel" style="background: none; border: none; padding: 0; font-family: inherit; cursor: pointer; text-decoration: underline;">
+                    Remove myself as a volunteer
+                </button>
+            </form>
+        <% } else { %>
+            <p>Interested in supporting this cause?</p>
+            <form action="/projects/<%= project.project_id %>/volunteer" method="POST">
+                <button type="submit" class="btn-add" style="border: none; margin-top: 0.5rem;">
+                    Volunteer for this Project
+                </button>
+            </form>
+        <% } %>
+    </div>
+<% } %>
+
     <div class="page-actions-footer">
         <p class="back-link">
             <a href="/projects">&larr; Back to Upcoming Projects</a>

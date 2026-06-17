@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { createUser } from '../models/users.js';
 import { authenticateUser, getAllUsersWithRoles } from '../models/users.js';
+import { getProjectsByVolunteer } from '../models/volunteers.js';
 
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
@@ -76,13 +77,30 @@ const requireLogin = (req, res, next) => {
 };
 
 // middleware function to show dashboard 
-const showDashboard = (req, res) => {
-    const user = req.session.user;
-    res.render('dashboard', { 
-        title: 'Dashboard',
-        name: user.name,
-        email: user.email
-    });
+const showDashboard = async (req, res) => {
+    const user = req.session.user; // cite: uploaded:users.js
+    
+    try {
+        // Fetch projects this user specifically signed up for
+        const volunteeredProjects = await getProjectsByVolunteer(user.user_id);
+
+        res.render('dashboard', { 
+            title: 'Dashboard', // cite: uploaded:users.js
+            name: user.name, // cite: uploaded:users.js
+            email: user.email, // cite: uploaded:users.js
+            user: user, 
+            volunteeredProjects: volunteeredProjects // Passed directly to template
+        });
+    } catch (error) {
+        console.error('Dashboard content retrieval error:', error);
+        res.render('dashboard', { 
+            title: 'Dashboard', // cite: uploaded:users.js
+            name: user.name, // cite: uploaded:users.js
+            email: user.email, // cite: uploaded:users.js
+            user: user,
+            volunteeredProjects: [] 
+        });
+    }
 };
 
 // Middleware factory to require a specific role for route access.

@@ -18,6 +18,7 @@ import { showAssignCategoriesForm, processAssignCategoriesForm } from './control
 import { showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { showCreateCategoryForm, processCreateCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidationRules } from './controllers/categories.js';
 import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, showDashboard, requireLogin, requireRole, showAllUsers } from './controllers/users.js';
+import { handleVolunteerCancel, handleVolunteerSignUp } from './controllers/volunteers.js';
 
 const router = express.Router();
 
@@ -105,6 +106,10 @@ router.post('/assign-categories/:projectId', requireRole('admin'), processAssign
 
 // Admin-only User Directory Route
 router.get('/users', requireLogin, requireRole('admin'), showAllUsers);
+
+// Protected Volunteer Action Endpoints
+router.post('/projects/:id/volunteer', requireLogin, handleVolunteerSignUp);
+router.post('/projects/:id/unvolunteer', requireLogin, handleVolunteerCancel);
 
 // Error-handling test route
 router.get('/test-error', testErrorPage);

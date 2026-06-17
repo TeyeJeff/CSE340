@@ -155,3 +155,12 @@ WHERE email = 'admin@example.com';
 SELECT users.user_id, users.email, roles.role_name 
 FROM users 
 JOIN roles ON users.role_id = roles.role_id;
+
+-- Junction Table for Many-to-Many relationship between Users and Projects 
+-- which will enable users to volunteer for many projects and projects can have multiple volunteers
+CREATE TABLE IF NOT EXISTS project_volunteers (
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    project_id INTEGER REFERENCES service_project(project_id) ON DELETE CASCADE,
+    volunteered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, project_id)
+);

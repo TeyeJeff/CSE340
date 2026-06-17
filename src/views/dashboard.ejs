@@ -7,8 +7,9 @@
     <p>Name: <%= name %></p>
     <p>Username: <%= email %></p>
 
-
-    <h2>Welcome back, <%= name %>!</h2> <% if (user && user.role_name === 'admin') { %>
+    <h2>Welcome back, <%= name %>!</h2> 
+    
+    <% if (user && user.role_name === 'admin') { %>
     <div class="admin-controls-panel">
         <h3>Administrative Tools</h3>
         <p>As an administrator, you have access to core directory structures:</p>
@@ -16,7 +17,37 @@
     </div>
     <% } %>
 
+    <hr class="section-divider" style="margin: 2rem 0;">
 
-</main>
+    <h2>My Volunteered Service Projects</h2>
+    <% if (locals.volunteeredProjects && volunteeredProjects.length > 0) { %>
+        <ul class="volunteer-list" style="list-style: none; padding: 0;">
+            <% volunteeredProjects.forEach(project => { %>
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; background: #fff;">
+                    <div>
+                        <strong>
+                            <a href="/project/<%= project.project_id %>" style="color: var(--primary-color); text-decoration: none;"><%= project.title %></a>
+                        </strong>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666;">
+                            Event Date: <%= new Date(project.date).toLocaleDateString() %>
+                        </p>
+                    </div>
+                    
+                    <form action="/projects/<%= project.project_id %>/unvolunteer" method="POST" style="margin: 0;">
+                        <input type="hidden" name="redirectSource" value="dashboard">
+                        <button type="submit" class="btn-cancel" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
+                            Cancel
+                        </button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <div style="background: #fff; padding: 20px; border-radius: 4px; text-align: center; border: 1px dashed #ccc;">
+            <p style="color: #666; margin: 0;">You haven't signed up to volunteer for any projects yet.</p>
+            <p style="margin: 10px 0 0 0;"><a href="/projects" class="btn" style="display: inline-block; text-decoration: none;">Browse Projects</a></p>
+        </div>
+    <% } %>
+    </main>
 
 <%- include('partials/footer') %>
